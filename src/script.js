@@ -57,8 +57,36 @@ function handleSearchSubmit(event) {
   searchCity(searchInput.value);
 }
 
+function displayForecast() {
+  let days = ["Tue", "Wed", "Thu", "Fri", "Sat"];
+  let forecastHtml = "";
+
+  days.forEach(function (day) {
+    forecastHtml =
+      forecastHtml +
+      `
+  <div class="weather-forecast-day">
+    <div class="weather-forcast-date">${day}</div>
+    <div class="weather-forcast-icon">☀️</div>
+    <div class="weather-forcast-temperatures">
+      <div class="weather-forcast-temperature">
+        <strong>18°</strong>
+      </div>
+      <div class="weather-forcast-temperature">12°</div>
+    </div>
+  </div>
+`;
+  });
+  //Using the loop forEach you inject the forecast for each day. But note that the days are set and the icon and temp also don't change.
+
+  let forecastElement = document.querySelector("#forecast");
+  forecastElement.innerHTML = forecastHtml;
+}
+
 let searchFormElement = document.querySelector("#search-form");
 searchFormElement.addEventListener("submit", handleSearchSubmit);
 
 searchCity("Brisbane City");
 //Default city after refreshing the page.
+
+displayForecast();

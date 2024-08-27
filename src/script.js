@@ -59,6 +59,13 @@ function handleSearchSubmit(event) {
   searchCity(searchInput.value);
 }
 
+function formatDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return days[date.getDay()];
+}
+
 function getForecast(city) {
   let apiKey = "tb462323aaaf0beaa9691f3od034f454";
   let apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
@@ -66,26 +73,29 @@ function getForecast(city) {
 }
 
 function displayForecast(response) {
-  console.log(response.data);
-
-  let days = ["Tue", "Wed", "Thu", "Fri", "Sat"];
   let forecastHtml = "";
 
-  days.forEach(function (day) {
-    forecastHtml =
-      forecastHtml +
-      `
+  response.data.daily.forEach(function (day, index) {
+    if (index < 5) {
+      forecastHtml =
+        forecastHtml +
+        `
   <div class="weather-forecast-day">
-    <div class="weather-forcast-date">${day}</div>
-    <div class="weather-forcast-icon">☀️</div>
+    <div class="weather-forcast-date">${formatDay(day.time)}</div>
+   
+    <img src="${day.condition.icon_url}" class="weather-forcast-icon"/>
+   
     <div class="weather-forcast-temperatures">
       <div class="weather-forcast-temperature">
-        <strong>18°</strong>
+        <strong>${Math.round(day.temperature.maximum)}°</strong>
       </div>
-      <div class="weather-forcast-temperature">12°</div>
+      <div class="weather-forcast-temperature">${Math.round(
+        day.temperature.minimum
+      )}°</div>
     </div>
   </div>
 `;
+    }
   });
   //Using the loop forEach you inject the forecast for each day. But note that the days are set and the icon and temp also don't change.
 
